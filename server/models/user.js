@@ -61,14 +61,19 @@ UserSchema.methods.generateAuthToken = function () {
 
   //  MongoError: Unknown modifier: $pushAll  Mongodb 3.6 doesnot 
   user.tokens.push({access, token});
-  console.log("===========");
-  console.log(user);
   
-
   return user.save().then(() => {
-    console.log("*******")
-    console.log(user);
     return token;
+  });
+};
+
+UserSchema.methods.removeToken = function (token) {
+  var user = this;
+
+  return user.update({
+    $pull: {
+      tokens: {token}
+    }
   });
 };
 
